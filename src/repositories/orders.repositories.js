@@ -76,5 +76,15 @@ export async function getOrderById(orderId) {
         WHERE
             o.id = $1`, [orderId])
 }
+export async function updateOrderDelivery(id, isDelivered) {
+    return db.query(
+        `UPDATE orders SET "isDelivered" = $2 WHERE id = $1`,
+        [id, isDelivered]
+    );
+}
 
-  
+export async function orderId(id) {
+    return db.query(`
+    SELECT * FROM orders WHERE id = $1;
+        `, [id])
+}

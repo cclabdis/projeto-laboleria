@@ -1,9 +1,9 @@
-import { getCakeById, getOrderById, getOrderInformationByDate, getUserById, postOrder } from "../repositories/orders.repositories.js";
+import { getCakeById, getOrderById, getOrderInformationByDate, getUserById, orderId, postOrder, updateOrderDelivery } from "../repositories/orders.repositories.js";
 
 
 export async function newOrder(req, res) {
-    const { clientId, cakeId, quantity, totalPrice} = req.body
-    
+    const { clientId, cakeId, quantity, totalPrice } = req.body
+
     try {
         const existingCake = await getCakeById(cakeId);
         if (existingCake.rowCount === 0) {
@@ -14,15 +14,15 @@ export async function newOrder(req, res) {
         if (existingUser.rowCount === 0) {
             return res.status(404).send("usuário não cadastrado")
         }
-    
+
         await postOrder(clientId, cakeId, quantity, totalPrice)
         res.sendStatus(201) //ok
     } catch (err) {
         res.status(500).send(err.message)
     }
-} 
+}
 
-export async function getOrders(req, res){
+export async function getOrders(req, res) {
     const { date } = req.query;
     try {
         const orders = await getOrderInformationByDate(date);
@@ -60,9 +60,9 @@ export async function getOrders(req, res){
     }
 }
 
-export async function getOrdersById(req, res){
-    const orderId = req.params.id; 
-    
+export async function getOrdersById(req, res) {
+    const orderId = req.params.id;
+
     try {
         const result = await getOrderById(orderId);
         if (result.rows.length === 0) {
@@ -98,24 +98,16 @@ export async function getOrdersById(req, res){
     }
 }
 
-//PATCH /order/:id
-export async function isDelivered(req, res){
-    const { orderId } = res.params.id
+export async function isDelivered(req, res) {
+    const { id } = req.params
 
     try {
-        await patchOrder(isDelivered)
-        res.sendStatus(204) //ok
+        const order = await orderId(id)
+        if (order.rowCount === 0) return res.status(404).send("usuário não tem pedidos")
+
+        await updateOrderDelivery(id, true)
+        res.status(204).send("Pedido entregue")
     } catch (err) {
-        res.status(500).send(err.message)
+        res.status(400).send(err.message)
     }
 }
-
-// - Adicionar a rota **PATCH** `/order/:id`
-//     - Deve alterar o status da coluna ***isDelivered*** para `true`.
-//     - **Regras de negócio**
-//         - Caso o `id` não exista ⇒ deve retornar **status 404**.
-//         - Caso o `id` não seja válido ⇒ deve retornar **status 400**.
-
-
-
-//clients
