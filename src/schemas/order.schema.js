@@ -1,5 +1,8 @@
 import joi from "joi";
 
 export const orderSchema = joi.object({
-    quantity: joi.string().min(1).max(4).required()
+    clientId: joi.number().required(),
+    cakeId: joi.number().required(),
+    totalPrice: joi.number().required(),
+    quantity: joi.number().min(1).max(4).required()
     });

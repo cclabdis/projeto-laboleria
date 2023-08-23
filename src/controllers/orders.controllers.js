@@ -1,15 +1,21 @@
-import { postCake } from "../repositories/cake.repositories.js"
+import { getCakeById, getUserById, postOrder } from "../repositories/orders.repositories.js";
 
 
 export async function newOrder(req, res) {
     const { clientId, cakeId, quantity, totalPrice} = req.body
-    if (!cleintId) { //se n existir id no banco e nem id do cake retornar 404
-      return res.status(404).send("Bolo não cadastrado")
-  }
-
-  return res.status(404).send("usuário não cadastrado")
+    
     try {
-        await postCake(name, image, price, description, flavourId)
+        const existingCake = await getCakeById(cakeId);
+        if (existingCake.rowCount === 0) {
+            return res.status(404).send("Bolo não cadastrado")
+        }
+
+        const existingUser = await getUserById(clientId);
+        if (existingUser.rowCount === 0) {
+            return res.status(404).send("usuário não cadastrado")
+        }
+    
+        await postOrder(clientId, cakeId, quantity, totalPrice)
         res.sendStatus(201) //ok
     } catch (err) {
         res.status(500).send(err.message)
