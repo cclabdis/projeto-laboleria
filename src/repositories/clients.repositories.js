@@ -1,8 +1,8 @@
 import { db } from "../database/database.connection.js"
 
-export async function postClient(name, image, price, description){
+export async function postClient(name, address, phone){
     return  db.query(`
-            INSERT INTO users (name, image, price, description)
-                VALUES ($1, $2, $3, $4, $5);
-        `, [name, image, price, description])
+            INSERT INTO clients (name, address, phone)
+                VALUES ($1, $2, $3);
+        `, [name, address, phone])
 }

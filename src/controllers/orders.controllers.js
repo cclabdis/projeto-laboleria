@@ -28,7 +28,7 @@ export async function getOrders(req, res){
     //          "client": {
     //              "id": 1,
     //              "name": "Fulana",
-    //              "address": "Rua tal",
+    //              "addresss": "Rua tal",
     //              "phone": "2199999999"
     //          },
     //          "cake": {
