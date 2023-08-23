@@ -1,4 +1,4 @@
-import { getCakeById, getUserById, postOrder } from "../repositories/orders.repositories.js";
+import { getCakeById, getOrderInformationByDate, getUserById, postOrder } from "../repositories/orders.repositories.js";
 
 
 export async function newOrder(req, res) {
@@ -22,40 +22,43 @@ export async function newOrder(req, res) {
     }
 } 
 
-
-
 export async function getOrders(req, res){
-    const { id }  = req.locals
+    const { date } = req.query;
+    try {
+        const orders = await getOrderInformationByDate(date);
 
+        if (orders.length === 0) {
+            return res.status(404).send(orders)
+        }
 
-    // retornar nesse formato
-    // [
-    //     {
-    //          "client": {
-    //              "id": 1,
-    //              "name": "Fulana",
-    //              "addresss": "Rua tal",
-    //              "phone": "2199999999"
-    //          },
-    //          "cake": {
-    //                      "id": 1
-    //              "name": "Bolo de pote",
-    //              "price": 13.00,
-    //                      "description": "Bolo de chocolate com recheio de leite ninho",
-    //                      "image": "encurtador.com.br/iDIX0"
-                    //      "flavourId:1"    //          },
-    //              "orderId": 1,
-    //          "createdAt": "2022-03-16 10:30",
-    //          "quantity": 2,
-    //          "totalPrice": 26.00
-              //"isDelivered": false
-    //          }
-    //  ]
+        const ordersInformation = orders.map(order => {
+            return {
+                client: {
+                    id: order.clientId,
+                    name: order.clientName,
+                    address: order.clientAddress,
+                    phone: order.clientPhone,
+                },
+                cake: {
+                    id: order.cakeId,
+                    name: order.cakeName,
+                    price: order.cakePrice,
+                    description: order.cakeDescription,
+                    image: order.cakeImage,
+                },
+                orderId: order.orderId,
+                createdAt: order.createdAt,
+                quantity: order.quantity,
+                totalPrice: order.totalPrice,
+            };
+        });
 
-//     - Pode receber uma **query string** `date` com o formato `YYYY-MM-DD` ⇒ nesse caso deve retornar apenas os pedidos da data especificada.
-// - Caso não tenha nenhum pedido ⇒ deve retornar um **array vazio** com **status 404**.
-// - Em caso de sucesso ⇒ deve retornar **status 200** e ****os dados conforme o exemplo.
+        res.status(200).send(ordersInformation)
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 }
+
 export async function isDelivered(req, res){
     const { id } = res.locals
 
