@@ -11,7 +11,6 @@ export async function newCake(req, res) {
 
         const flavorExists = await checkFlavourId(flavourId);
         if (flavorExists.rowCount === 0) {
-            console.log(flavorExists)
             return res.status(404).send("Sabor não encontrado");
         }
 
@@ -29,7 +28,6 @@ export async function newflavour(req, res) {
 
         const flavorExists = await checkFlavour(name);
         if (flavorExists.rowCount === 1) {
-            console.log(flavorExists)
             return res.status(409).send("Sabor já existente.");
         }
 

@@ -102,12 +102,18 @@ export async function isDelivered(req, res) {
     const { id } = req.params
 
     try {
-        const order = await orderId(id)
+        if (!/^\d+$/.test(id)) {
+            return res.status(400).send("ID inválido")
+        }
+        
+        const order = await orderId(id)       
         if (order.rowCount === 0) return res.status(404).send("usuário não tem pedidos")
 
         await updateOrderDelivery(id, true)
+        
         res.status(204).send("Pedido entregue")
+        
     } catch (err) {
-        res.status(400).send(err.message)
+        res.status(500).send(err.message)
     }
 }
