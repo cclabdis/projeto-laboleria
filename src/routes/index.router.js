@@ -1,7 +1,7 @@
 import { Router } from "express"
-import cakeRouter from "./cake.router"
-import clientRouter from "./clients.router"
-import orderRouter from "./orders.router"
+import cakeRouter from "./cake.router.js"
+import clientRouter from "./clients.router.js"
+import orderRouter from "./orders.router.js"
 
 
 const router = Router()

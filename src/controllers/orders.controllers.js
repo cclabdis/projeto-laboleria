@@ -1,5 +1,4 @@
-
-import { postCake } from "../repositories/cake.repositories"
+import { postCake } from "../repositories/cake.repositories.js"
 
 
 export async function newOrder(req, res) {
@@ -68,6 +67,9 @@ export async function isDelivered(req, res){
 //         - Caso o `id` não exista ⇒ deve retornar **status 404**.
 //         - Caso o `id` não seja válido ⇒ deve retornar **status 400**.
 
+
+
+//clients
 export async function getOrdersById(req, res){
     const { id } =req.locals
     // [

@@ -1,4 +1,4 @@
-import { postClient } from "../repositories/clients.repositories"
+import { postClient } from "../repositories/clients.repositories.js"
 
 
 export async function newClient(req, res) {
