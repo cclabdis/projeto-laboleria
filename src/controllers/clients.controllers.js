@@ -1,4 +1,4 @@
-import { postClient } from "../repositories/clients.repositories.js"
+import { getOrderByClient, postClient } from "../repositories/clients.repositories.js"
 
 
 export async function newClient(req, res) {
@@ -11,20 +11,28 @@ export async function newClient(req, res) {
     }
 } 
 
-//GET  /clients/:id/orders
 export async function getOrdersByClientId(req, res){
-//     const { id } =req.locals
-    // [
-    //     {
-    //         "orderId": 1,
-    //         "quantity": 2,
-    //         "createdAt": "2022-03-16 10:30",
-    //         "totalPrice": 26.00,
-    //         "cakeName": "Bolo de pote"
-    //     }
-    // ]
+    const  clientId  = req.params.id
 
-//     - Caso não exista um cliente com o `id` passado ⇒ deve retornar **status 404**.
-// - Em caso de sucesso ⇒ deve retornar **status 200** e as informações conforme o exemplo.
+    try{
+        const result = await getOrderByClient(clientId);
+        if (result.rows.length === 0) {
+            res.status(404).send("Nenhum pedido encontrado para este cliente.");
+            return;
+        }
+               
+        const orderInfo =  result.rows.map(order => ({
+            orderId: order.orderId,
+            quantity: order.quantity,
+            createdAt: order.createdAt,
+            totalPrice: order.totalPrice,
+            cakeName: order.cakeName,
+        }));
 
+
+        res.status(200).send(orderInfo);
+        }
+     catch (err) {
+        res.status(500).send(err.message);
+    }
 }

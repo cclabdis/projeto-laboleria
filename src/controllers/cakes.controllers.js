@@ -1,6 +1,5 @@
 import { checkFlavour, checkFlavourId, getCakeByName, postCake, postFlavour } from "../repositories/cake.repositories.js"
 
-
 export async function newCake(req, res) {
     const { name, image, price, description, flavourId } = req.body
 
