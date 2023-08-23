@@ -20,8 +20,6 @@ export async function postOrder(clientId, cakeId, quantity, totalPrice) {
         `, [clientId, cakeId, quantity, totalPrice])
 }
 
-
-
 export async function getOrderInformationByDate(date) {
     let query = `
         SELECT
@@ -37,7 +35,8 @@ export async function getOrderInformationByDate(date) {
             ca.image as "cakeImage",
             o."createdAt",
             o.quantity,
-            o."totalPrice"
+            o."totalPrice",
+            o."isDelivered"
         FROM
             orders o
             INNER JOIN clients c ON o."clientId" = c.id

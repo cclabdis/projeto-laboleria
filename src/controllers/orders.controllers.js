@@ -50,6 +50,7 @@ export async function getOrders(req, res){
                 createdAt: order.createdAt,
                 quantity: order.quantity,
                 totalPrice: order.totalPrice,
+                isDelivered: order.isDelivered
             };
         });
 
@@ -59,6 +60,23 @@ export async function getOrders(req, res){
     }
 }
 
+
+export async function getOrdersById(req, res){
+    const { id } =req.locals
+    // [
+    //     {
+    //         "orderId": 1,
+    //         "quantity": 2,
+    //         "createdAt": "2022-03-16 10:30",
+    //         "totalPrice": 26.00,
+    //         "cakeName": "Bolo de pote"
+    //     }
+    // ]
+
+//     - Caso não exista um cliente com o `id` passado ⇒ deve retornar **status 404**.
+// - Em caso de sucesso ⇒ deve retornar **status 200** e as informações conforme o exemplo.
+
+}
 export async function isDelivered(req, res){
     const { id } = res.locals
 
@@ -79,19 +97,3 @@ export async function isDelivered(req, res){
 
 
 //clients
-export async function getOrdersById(req, res){
-    const { id } =req.locals
-    // [
-    //     {
-    //         "orderId": 1,
-    //         "quantity": 2,
-    //         "createdAt": "2022-03-16 10:30",
-    //         "totalPrice": 26.00,
-    //         "cakeName": "Bolo de pote"
-    //     }
-    // ]
-
-//     - Caso não exista um cliente com o `id` passado ⇒ deve retornar **status 404**.
-// - Em caso de sucesso ⇒ deve retornar **status 200** e as informações conforme o exemplo.
-
-}
