@@ -52,3 +52,29 @@ export async function getOrderInformationByDate(date) {
     const result = await db.query(query, queryParams);
     return result.rows;
 }
+
+export async function getOrderById(orderId) {
+    return db.query(`
+        SELECT
+            o.id as "orderId",
+            c.id as "clientId",
+            c.name as "clientName",
+            c.address as "clientAddress",
+            c.phone as "clientPhone",
+            ca.id as "cakeId",
+            ca.name as "cakeName",
+            ca.price as "cakePrice",
+            ca.description as "cakeDescription",
+            ca.image as "cakeImage",
+            o."createdAt",
+            o.quantity,
+            o."totalPrice"
+        FROM
+            orders o
+            INNER JOIN clients c ON o."clientId" = c.id
+            INNER JOIN cakes ca ON o."cakeId" = ca.id
+        WHERE
+            o.id = $1`, [orderId])
+}
+
+  

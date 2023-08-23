@@ -1,4 +1,4 @@
-import { getCakeById, getOrderInformationByDate, getUserById, postOrder } from "../repositories/orders.repositories.js";
+import { getCakeById, getOrderById, getOrderInformationByDate, getUserById, postOrder } from "../repositories/orders.repositories.js";
 
 
 export async function newOrder(req, res) {
@@ -60,25 +60,76 @@ export async function getOrders(req, res){
     }
 }
 
-
+//GET /orders/:id
 export async function getOrdersById(req, res){
-    const { id } =req.locals
-    // [
-    //     {
-    //         "orderId": 1,
-    //         "quantity": 2,
-    //         "createdAt": "2022-03-16 10:30",
-    //         "totalPrice": 26.00,
-    //         "cakeName": "Bolo de pote"
-    //     }
-    // ]
+    const orderId = req.params.id; // Assumindo que o ID é passado como parâmetro na URL
 
-//     - Caso não exista um cliente com o `id` passado ⇒ deve retornar **status 404**.
-// - Em caso de sucesso ⇒ deve retornar **status 200** e as informações conforme o exemplo.
+    try {
+        const result = await getOrderById(orderId);
+        if (result.rows.length === 0) {
+            res.status(404).send("Pedido não encontrado.");
+            return;
+        }
 
+        const order = result.rows[0];
+
+        const orderInfo = {
+            client: {
+                id: order.clientId,
+                name: order.clientName,
+                address: order.clientAddress,
+                phone: order.clientPhone,
+            },
+            cake: {
+                id: order.cakeId,
+                name: order.cakeName,
+                price: order.cakePrice,
+                description: order.cakeDescription,
+                image: order.cakeImage,
+            },
+            orderId: order.orderId,
+            createdAt: order.createdAt,
+            quantity: order.quantity,
+            totalPrice: order.totalPrice,
+        };
+
+        res.status(200).send(orderInfo);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 }
+//     - Deve retornar as informações do pedido com id específico, seguindo o formato abaixo.
+
+// ```json
+// {
+//     "client": {
+//         "id": 1,
+//         "name": "Fulana",
+//         "address": "Rua tal",
+//         "phone": "2199999999"
+//     },
+//     "cake": {
+// 				"id": 1
+//         "name": "Bolo de pote",
+//         "price": 13.00,
+// 				"description": "Bolo de chocolate com recheio de leite ninho",
+// 				"image": "encurtador.com.br/iDIX0"
+//     },
+// 		"orderId": 1,
+//     "createdAt": "2022-03-16 10:30",
+//     "quantity": 2,
+//     "totalPrice": 26.00
+// }
+// ```
+
+// - **Regras de negócio**
+//     - Se o `id` passado não existir ⇒ deve retornar **status 404.**
+//     - Em caso de sucesso ⇒ deve retornar **status 200** e ****as informações do pedido conforme o exemplo.
+// }
+
+//PATCH /order/:id
 export async function isDelivered(req, res){
-    const { id } = res.locals
+    const { orderId } = res.params.id
 
     try {
         await patchOrder(isDelivered)

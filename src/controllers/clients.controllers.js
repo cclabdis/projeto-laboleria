@@ -11,3 +11,20 @@ export async function newClient(req, res) {
     }
 } 
 
+//GET  /clients/:id/orders
+export async function getOrdersByClientId(req, res){
+//     const { id } =req.locals
+    // [
+    //     {
+    //         "orderId": 1,
+    //         "quantity": 2,
+    //         "createdAt": "2022-03-16 10:30",
+    //         "totalPrice": 26.00,
+    //         "cakeName": "Bolo de pote"
+    //     }
+    // ]
+
+//     - Caso não exista um cliente com o `id` passado ⇒ deve retornar **status 404**.
+// - Em caso de sucesso ⇒ deve retornar **status 200** e as informações conforme o exemplo.
+
+}
