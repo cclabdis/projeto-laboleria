@@ -33,7 +33,7 @@ export async function getOrderInformationByDate(date) {
             ca.price as "cakePrice",
             ca.description as "cakeDescription",
             ca.image as "cakeImage",
-            o."createdAt",
+            TO_CHAR(o."createdAt", 'YYYY-MM-DD HH24:MI') as "createdAt",
             o.quantity,
             o."totalPrice",
             o."isDelivered"
@@ -66,7 +66,7 @@ export async function getOrderById(orderId) {
             ca.price as "cakePrice",
             ca.description as "cakeDescription",
             ca.image as "cakeImage",
-            o."createdAt",
+            TO_CHAR(o."createdAt", 'YYYY-MM-DD HH24:MI') as "createdAt",
             o.quantity,
             o."totalPrice"
         FROM

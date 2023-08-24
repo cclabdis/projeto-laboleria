@@ -13,7 +13,7 @@ export async function getOrderByClient(clientId) {
         SELECT
         c.id as "clientId",
         o.id as "orderId",
-        o."createdAt",
+        TO_CHAR(o."createdAt", 'YYYY-MM-DD HH24:MI') as "createdAt",
         o.quantity,
         o."totalPrice",
         ca.name as "cakeName"
